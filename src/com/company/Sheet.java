@@ -75,11 +75,11 @@ public class Sheet {
         }
     }
 
-    public void count(){
+    public void count() {
         System.out.println("Folyamatban");
     }
 
-    public void closeSheet(){
+    public void closeSheet() {
         scanner.close();
     }
 
