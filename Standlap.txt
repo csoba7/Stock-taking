@@ -1,2 +1,2 @@
-dréher 450 8 db
+dréher 450 628 db
 ropi 200 6 db
