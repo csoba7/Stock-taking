@@ -20,6 +20,18 @@ public class Main {
         System.out.println();
     }
 
+    private static void addProduct(){
+        System.out.println();
+        sheet.addProduct();
+        System.out.println();
+    }
+
+    private static void removeProduct(){
+        System.out.println();
+        sheet.removeProduct();
+        System.out.println();
+    }
+
     private static void count() {
         System.out.println();
         sheet.count();
@@ -36,7 +48,9 @@ public class Main {
         while (run) {
             System.out.println("1 - Listázás\n" +
                     "2 - Termékhez adás/elvétel\n" +
-                    "3 - Kiszámolás\n" +
+                    "3 - Termék hozzáadása\n" +
+                    "4 - Termék törlése\n" +
+                    "5 - Kiszámolás\n" +
                     "Kilépés - Kilépés");
             System.out.print("Opció választása: ");
             switch (scanner.nextLine().toLowerCase()) {
@@ -47,6 +61,12 @@ public class Main {
                     addSheet();
                     break;
                 case "3":
+                    addProduct();
+                    break;
+                case "4":
+                    removeProduct();
+                    break;
+                case "5":
                     count();
                     break;
                 case "kilépés":

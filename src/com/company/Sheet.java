@@ -49,10 +49,10 @@ public class Sheet {
     }
 
     public void list() {
-        System.out.println("Termék\t\tÁr\t\tMennyiség");
-        System.out.println("-----------------------------");
+        System.out.println("Termék\t\t\t\t\tÁr\t\t\t\t\tMennyiség");
+        System.out.println("-----------------------------------------------------");
         for (int i = 0; i < product.size(); i++) {
-            System.out.println(product.get(i) + "\t\t" + price.get(i) + "\t\t" + quantity.get(i) + unit.get(i));
+            System.out.println(product.get(i) + "\t\t\t\t\t" + price.get(i) + "\t\t\t\t\t" + quantity.get(i) + unit.get(i));
         }
     }
 
@@ -81,6 +81,47 @@ public class Sheet {
 
     public void closeSheet() {
         scanner.close();
+    }
+
+    public void addProduct() {
+        System.out.print("Termék neve:");
+        String name = scanner.nextLine();
+        name = name.toLowerCase();
+        System.out.print("Termék ára: ");
+        String priceTmp = scanner.nextLine();
+        System.out.print("Termék mennyisége: ");
+        String quantityTmp = scanner.nextLine();
+        System.out.print("Termék mértékegysége: ");
+        String unitTmp = scanner.nextLine();
+        if (!name.isBlank() && !priceTmp.isBlank() && !quantityTmp.isBlank() && !unitTmp.isBlank() && !product.contains(name) && name.length() < 8) {
+            product.add(name);
+            price.add(priceTmp);
+            quantity.add(quantityTmp);
+            unit.add(unitTmp);
+            System.out.println(name + " hozzáadva a listához!");
+            toFile();
+        } else {
+            if (name.length() > 8)
+                System.out.println("Túl hosszú termék név!");
+            else
+                System.out.println("Hiba!");
+        }
+    }
+
+    public void removeProduct() {
+        System.out.print("Termék neve:");
+        String name = scanner.nextLine();
+        name = name.toLowerCase();
+        if (product.contains(name)) {
+            int index = product.indexOf(name);
+            product.remove(index);
+            price.remove(index);
+            quantity.remove(index);
+            unit.remove(index);
+            System.out.println(name + " termék törölve!");
+            toFile();
+        } else
+            System.out.println("Nincs ilyen termék a listában!");
     }
 
 }
