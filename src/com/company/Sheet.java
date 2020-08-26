@@ -93,7 +93,7 @@ public class Sheet {
         String quantityTmp = scanner.nextLine();
         System.out.print("Termék mértékegysége: ");
         String unitTmp = scanner.nextLine();
-        if (!name.isBlank() && !priceTmp.isBlank() && !quantityTmp.isBlank() && !unitTmp.isBlank() && !product.contains(name) && name.length() < 8) {
+        if (!name.isBlank() && !priceTmp.isBlank() && !quantityTmp.isBlank() && !unitTmp.isBlank() && !product.contains(name) && name.length() < 8 && !name.contains(" ")) {
             product.add(name);
             price.add(priceTmp);
             quantity.add(quantityTmp);
@@ -103,6 +103,8 @@ public class Sheet {
         } else {
             if (name.length() > 8)
                 System.out.println("Túl hosszú termék név!");
+            else if (name.contains(" "))
+                System.out.println("A név nem tartalmazhat szóközt!");
             else
                 System.out.println("Hiba!");
         }
