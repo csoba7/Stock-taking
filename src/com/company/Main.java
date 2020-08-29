@@ -52,6 +52,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         sheet.toArrayList();
         sheet.setCurrentQuantity();
+        sheet.productToFridge();
         while (run) {
             System.out.println("1 - Listázás\n" +
                     "2 - Maradványhoz adás/vétel\n" +
