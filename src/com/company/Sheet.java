@@ -67,8 +67,7 @@ public class Sheet {
         if (index >= 0) {
             System.out.println("A kiválasztott termék a(z) " + product.get(index) + " mennyisége: " + startingQuantity.get(index) + unit.get(index));
             System.out.print("Mennyit szeretnél hozzáadni/elvenni? ");
-            double tmp = scanner.nextDouble();
-            scanner.nextLine();
+            double tmp = Double.parseDouble(scanner.nextLine());
             tmp += Double.parseDouble(startingQuantity.get(index));
             startingQuantity.set(index, Double.toString(tmp));
             System.out.println("A(z) " + product.get(index) + " termék új mennyisége: " + startingQuantity.get(index) + unit.get(index));
@@ -86,8 +85,7 @@ public class Sheet {
         if (index >= 0) {
             System.out.println("A kiválasztott termék a(z) " + product.get(index) + " maradvány mennyisége: " + currentQuantity.get(index) + unit.get(index));
             System.out.print("Mennyit szeretnél hozzáadni/elvenni? ");
-            double tmp = scanner.nextDouble();
-            scanner.nextLine();
+            double tmp = Double.parseDouble(scanner.nextLine());
             tmp += currentQuantity.get(index);
             currentQuantity.set(index, tmp);
             System.out.println("A(z) " + product.get(index) + " termék új maradvány mennyisége: " + currentQuantity.get(index) + unit.get(index));

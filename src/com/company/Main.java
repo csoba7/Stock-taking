@@ -9,7 +9,9 @@ public class Main {
     private static Sheet sheet = new Sheet();
 
     private static void addCurrentQuantity() {
-
+        System.out.println();
+        sheet.addForCurrentProduct();
+        System.out.println();
     }
 
     private static void addSheet() {

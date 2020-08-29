@@ -1,4 +1,4 @@
 dréher 420 15 db
 ropi 130 10 db
-ászok 390 18 db
+ászok 390 19.0 db
 pálinka 1500 0.5 l
