@@ -1,6 +1,5 @@
 package com.company;
 
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -30,15 +29,17 @@ public class Sheet {
             }
         }
         String line;
-        while (scannerFile.hasNextLine()) {
-            line = scannerFile.nextLine();
-            line = line.toLowerCase();
-            String[] tmp = line.split(" ");
-            product.add(tmp[0]);
-            price.add(tmp[1]);
-            startingQuantity.add(tmp[2]);
-            unit.add(tmp[3]);
-            fridge.add(Integer.parseInt(tmp[4]));
+        if (scannerFile != null) {
+            while (scannerFile.hasNextLine()) {
+                line = scannerFile.nextLine();
+                line = line.toLowerCase();
+                String[] tmp = line.split(" ");
+                product.add(tmp[0]);
+                price.add(tmp[1]);
+                startingQuantity.add(tmp[2]);
+                unit.add(tmp[3]);
+                fridge.add(Integer.parseInt(tmp[4]));
+            }
         }
     }
 
@@ -49,11 +50,15 @@ public class Sheet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        PrintWriter pw = new PrintWriter(fw);
-        for (int i = 0; i < product.size(); i++) {
-            pw.println(product.get(i) + " " + price.get(i) + " " + startingQuantity.get(i) + " " + unit.get(i) + " " + fridge.get(i));
+        if(fw != null) {
+            PrintWriter pw = new PrintWriter(fw);
+            for (int i = 0; i < product.size(); i++) {
+                pw.println(product.get(i) + " " + price.get(i) + " " + startingQuantity.get(i) + " " + unit.get(i) + " " + fridge.get(i));
+            }
+            pw.close();
         }
-        pw.close();
+        else
+            System.out.println("Nem sikerült beolvasni a fájlt!");
     }
 
     private int whichFridge() {
@@ -68,7 +73,7 @@ public class Sheet {
         System.out.println("Termék\t\t\t\t\tÁr\t\t\t\t\t\tNyitó készlet\t\t\t\t\tMaradvány");
         System.out.println("-----------------------------------------------------------------------------------------");
         for (int i = 0; i < product.size(); i++) {
-            if (fridgeTmp == fridge.get(i))
+            if (fridgeTmp == fridge.get(i) || fridgeTmp == 0)
                 System.out.println(product.get(i) + "\t\t\t\t\t" + price.get(i) + "\t\t\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
         }
     }
@@ -166,11 +171,14 @@ public class Sheet {
         String startingQuantityTmp = scanner.nextLine();
         System.out.print("Termék mértékegysége: ");
         String unitTmp = scanner.nextLine();
-        if (!name.isBlank() && !priceTmp.isBlank() && !startingQuantityTmp.isBlank() && !unitTmp.isBlank() && !product.contains(name) && !name.contains(" ")) {
+        System.out.print("Termék hűtője: ");
+        String fridgeTmp = scanner.nextLine();
+        if (!name.isBlank() && !priceTmp.isBlank() && !startingQuantityTmp.isBlank() && !unitTmp.isBlank() && !fridgeTmp.isBlank() && !product.contains(name) && !name.contains(" ")) {
             product.add(name);
             price.add(priceTmp);
             startingQuantity.add(startingQuantityTmp);
             unit.add(unitTmp);
+            fridge.add(Integer.parseInt(fridgeTmp));
             currentQuantity.add(0.0);
             System.out.println(name + " hozzáadva a listához!");
             toFile();
