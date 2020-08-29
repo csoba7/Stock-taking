@@ -179,6 +179,9 @@ public class Sheet {
             startingQuantity.add(startingQuantityTmp);
             unit.add(unitTmp);
             fridge.add(Integer.parseInt(fridgeTmp));
+            if(Integer.parseInt(fridgeTmp) == 1) fridge1.add(name);
+            else if(Integer.parseInt(fridgeTmp) == 2) fridge2.add(name);
+            else if(Integer.parseInt(fridgeTmp) == 3) fridge3.add(name);
             currentQuantity.add(0.0);
             System.out.println(name + " hozzáadva a listához!");
             toFile();

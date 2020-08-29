@@ -3,3 +3,4 @@ ropi 130 10.0 db 3
 ászok 390 15.0 db 1
 pálinka 1500 0.5 l 2
 hb 450 21 db 1
+hbbúza 500 4 db 1
