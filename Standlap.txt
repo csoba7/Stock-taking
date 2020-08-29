@@ -1,3 +1,4 @@
-dréher 450 628 db
-ropi 200 6 db
-ászok 420 5 db
+dréher 420 15 db
+ropi 130 10 db
+ászok 390 18 db
+pálinka 1500 0.5 l

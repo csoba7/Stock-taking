@@ -1,15 +1,18 @@
 package com.company;
 
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Sheet {
     private Scanner scanner = new Scanner(System.in);
-    private ArrayList<String> product = new ArrayList<String>();
-    private ArrayList<String> price = new ArrayList<String>();
-    private ArrayList<String> quantity = new ArrayList<String>();
-    private ArrayList<String> unit = new ArrayList<String>();
+    private ArrayList<String> product = new ArrayList<>();
+    private ArrayList<String> price = new ArrayList<>();
+    private ArrayList<String> startingQuantity = new ArrayList<>();
+    private ArrayList<String> unit = new ArrayList<>();
+    private ArrayList<Double> currentQuantity = new ArrayList<>();
+
 
     public void toArrayList() {
         File file = new File("Standlap.txt");
@@ -29,7 +32,7 @@ public class Sheet {
             String[] tmp = line.split(" ");
             product.add(tmp[0]);
             price.add(tmp[1]);
-            quantity.add(tmp[2]);
+            startingQuantity.add(tmp[2]);
             unit.add(tmp[3]);
         }
     }
@@ -43,32 +46,51 @@ public class Sheet {
         }
         PrintWriter pw = new PrintWriter(fw);
         for (int i = 0; i < product.size(); i++) {
-            pw.println(product.get(i) + " " + price.get(i) + " " + quantity.get(i) + " " + unit.get(i));
+            pw.println(product.get(i) + " " + price.get(i) + " " + startingQuantity.get(i) + " " + unit.get(i));
         }
         pw.close();
     }
 
     public void list() {
-        System.out.println("Termék\t\t\t\t\tÁr\t\t\t\t\tMennyiség");
-        System.out.println("-----------------------------------------------------");
+        System.out.println("Termék\t\t\t\t\tÁr\t\t\t\t\t\tNyitó készlet\t\t\t\t\tMaradvány");
+        System.out.println("-----------------------------------------------------------------------------------------");
         for (int i = 0; i < product.size(); i++) {
-            System.out.println(product.get(i) + "\t\t\t\t\t" + price.get(i) + "\t\t\t\t\t" + quantity.get(i) + unit.get(i));
+            System.out.println(product.get(i) + "\t\t\t\t\t" + price.get(i) + "\t\t\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
         }
     }
 
-    public void addForItem() {
+    public void addForStartingProduct() {
         System.out.print("Mihez szeretnél hozzáadni/elvenni? ");
         String line = scanner.nextLine();
         line = line.toLowerCase();
         int index = product.indexOf(line);
         if (index >= 0) {
-            System.out.println("A kiválasztott termék a(z) " + product.get(index) + " mennyisége: " + quantity.get(index) + unit.get(index));
+            System.out.println("A kiválasztott termék a(z) " + product.get(index) + " mennyisége: " + startingQuantity.get(index) + unit.get(index));
             System.out.print("Mennyit szeretnél hozzáadni/elvenni? ");
-            int tmp = scanner.nextInt();
+            double tmp = scanner.nextDouble();
             scanner.nextLine();
-            tmp += Integer.parseInt(quantity.get(index));
-            quantity.set(index, Integer.toString(tmp));
-            System.out.println("A(z) " + product.get(index) + " termék új mennyisége: " + quantity.get(index) + unit.get(index));
+            tmp += Double.parseDouble(startingQuantity.get(index));
+            startingQuantity.set(index, Double.toString(tmp));
+            System.out.println("A(z) " + product.get(index) + " termék új mennyisége: " + startingQuantity.get(index) + unit.get(index));
+            toFile();
+        } else {
+            System.out.println("Nincs ilyen termék!");
+        }
+    }
+
+    public void addForCurrentProduct(){
+        System.out.print("Mihez szeretnél hozzáadni/elvenni? ");
+        String line = scanner.nextLine();
+        line = line.toLowerCase();
+        int index = product.indexOf(line);
+        if (index >= 0) {
+            System.out.println("A kiválasztott termék a(z) " + product.get(index) + " maradvány mennyisége: " + currentQuantity.get(index) + unit.get(index));
+            System.out.print("Mennyit szeretnél hozzáadni/elvenni? ");
+            double tmp = scanner.nextDouble();
+            scanner.nextLine();
+            tmp += currentQuantity.get(index);
+            currentQuantity.set(index, tmp);
+            System.out.println("A(z) " + product.get(index) + " termék új maradvány mennyisége: " + currentQuantity.get(index) + unit.get(index));
             toFile();
         } else {
             System.out.println("Nincs ilyen termék!");
@@ -90,20 +112,19 @@ public class Sheet {
         System.out.print("Termék ára: ");
         String priceTmp = scanner.nextLine();
         System.out.print("Termék mennyisége: ");
-        String quantityTmp = scanner.nextLine();
+        String startingQuantityTmp = scanner.nextLine();
         System.out.print("Termék mértékegysége: ");
         String unitTmp = scanner.nextLine();
-        if (!name.isBlank() && !priceTmp.isBlank() && !quantityTmp.isBlank() && !unitTmp.isBlank() && !product.contains(name) && name.length() < 8 && !name.contains(" ")) {
+        if (!name.isBlank() && !priceTmp.isBlank() && !startingQuantityTmp.isBlank() && !unitTmp.isBlank() && !product.contains(name) && !name.contains(" ")) {
             product.add(name);
             price.add(priceTmp);
-            quantity.add(quantityTmp);
+            startingQuantity.add(startingQuantityTmp);
             unit.add(unitTmp);
+            currentQuantity.add(0.0);
             System.out.println(name + " hozzáadva a listához!");
             toFile();
         } else {
-            if (name.length() > 8)
-                System.out.println("Túl hosszú termék név!");
-            else if (name.contains(" "))
+            if (name.contains(" "))
                 System.out.println("A név nem tartalmazhat szóközt!");
             else
                 System.out.println("Hiba!");
@@ -118,12 +139,18 @@ public class Sheet {
             int index = product.indexOf(name);
             product.remove(index);
             price.remove(index);
-            quantity.remove(index);
+            startingQuantity.remove(index);
             unit.remove(index);
+            currentQuantity.remove(index);
             System.out.println(name + " termék törölve!");
             toFile();
         } else
             System.out.println("Nincs ilyen termék a listában!");
+    }
+
+    public void setCurrentQuantity(){
+        for (int i = 0; i < product.size(); i++)
+            currentQuantity.add(0.0);
     }
 
 }

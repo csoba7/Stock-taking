@@ -8,9 +8,13 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static Sheet sheet = new Sheet();
 
+    private static void addCurrentQuantity() {
+
+    }
+
     private static void addSheet() {
         System.out.println();
-        sheet.addForItem();
+        sheet.addForStartingProduct();
         System.out.println();
     }
 
@@ -20,13 +24,13 @@ public class Main {
         System.out.println();
     }
 
-    private static void addProduct(){
+    private static void addProduct() {
         System.out.println();
         sheet.addProduct();
         System.out.println();
     }
 
-    private static void removeProduct(){
+    private static void removeProduct() {
         System.out.println();
         sheet.removeProduct();
         System.out.println();
@@ -45,12 +49,14 @@ public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
         sheet.toArrayList();
+        sheet.setCurrentQuantity();
         while (run) {
             System.out.println("1 - Listázás\n" +
-                    "2 - Termékhez adás/elvétel\n" +
-                    "3 - Termék hozzáadása\n" +
-                    "4 - Termék törlése\n" +
-                    "5 - Kiszámolás\n" +
+                    "2 - Maradványhoz adás/vétel\n" +
+                    "3 - Nyitókészlethez adás/elvétel\n" +
+                    "4 - Termék hozzáadása\n" +
+                    "5 - Termék törlése\n" +
+                    "6 - Kiszámolás\n" +
                     "Kilépés - Kilépés");
             System.out.print("Opció választása: ");
             switch (scanner.nextLine().toLowerCase()) {
@@ -58,15 +64,18 @@ public class Main {
                     listSheet();
                     break;
                 case "2":
-                    addSheet();
+                    addCurrentQuantity();
                     break;
                 case "3":
-                    addProduct();
+                    addSheet();
                     break;
                 case "4":
-                    removeProduct();
+                    addProduct();
                     break;
                 case "5":
+                    removeProduct();
+                    break;
+                case "6":
                     count();
                     break;
                 case "kilépés":
