@@ -1,7 +1,11 @@
 package com.company;
 
 import java.io.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Sheet {
@@ -30,6 +34,7 @@ public class Sheet {
         }
         String line;
         if (scannerFile != null) {
+            scannerFile.nextLine();
             while (scannerFile.hasNextLine()) {
                 line = scannerFile.nextLine();
                 line = line.toLowerCase();
@@ -50,19 +55,19 @@ public class Sheet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(fw != null) {
+        if (fw != null) {
             PrintWriter pw = new PrintWriter(fw);
+            pw.println("//Termék Ár Nyitókészlet Mértékegység Hűtő");
             for (int i = 0; i < product.size(); i++) {
                 pw.println(product.get(i) + " " + price.get(i) + " " + startingQuantity.get(i) + " " + unit.get(i) + " " + fridge.get(i));
             }
             pw.close();
-        }
-        else
+        } else
             System.out.println("Nem sikerült beolvasni a fájlt!");
     }
 
     private int whichFridge() {
-        System.out.println("Melyik hűtő termékei legyen listázva? ");
+        System.out.print("Melyik hűtő termékei legyen listázva? ");
         int fridgeTmp = scanner.nextInt();
         scanner.nextLine();
         return fridgeTmp;
@@ -70,11 +75,25 @@ public class Sheet {
 
     public void list() {
         int fridgeTmp = whichFridge();
-        System.out.println("Termék\t\t\t\t\tÁr\t\t\t\t\t\tNyitó készlet\t\t\t\t\tMaradvány");
+        System.out.println("Termék\t\t\t\t\tÁr\t\t\t\t\t\tnyitókészlet\t\t\t\t\tMaradvány");
         System.out.println("-----------------------------------------------------------------------------------------");
         for (int i = 0; i < product.size(); i++) {
-            if (fridgeTmp == fridge.get(i) || fridgeTmp == 0)
-                System.out.println(product.get(i) + "\t\t\t\t\t" + price.get(i) + "\t\t\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
+            if (fridgeTmp == fridge.get(i) || fridgeTmp == 0) {
+                if (product.get(i).length() < 4)
+                    System.out.print(product.get(i) + "\t\t\t\t\t\t");
+                else if (product.get(i).length() < 8)
+                    System.out.print(product.get(i) + "\t\t\t\t\t");
+                else if (product.get(i).length() < 12)
+                    System.out.print(product.get(i) + "\t\t\t\t");
+                else
+                    System.out.print(product.get(i) + "\t\t\t");
+                if (price.get(i).length() < 4)
+                    System.out.println(price.get(i) + "\t\t\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
+                else if (price.get(i).length() < 8)
+                    System.out.println(price.get(i) + "\t\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
+                else if (product.get(i).length() < 15)
+                    System.out.println(price.get(i) + "\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
+            }
         }
     }
 
@@ -153,8 +172,17 @@ public class Sheet {
         }
     }
 
+
     public void count() {
-        System.out.println("Folyamatban");
+        double sum = 0;
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(' ');
+        formatter.setDecimalFormatSymbols(symbols);
+        for (int i = 0; i < product.size(); i++) {
+            sum += (Double.parseDouble(startingQuantity.get(i)) - currentQuantity.get(i)) * Double.parseDouble(price.get(i));
+        }
+        System.out.println("A standolás végösszege: " + formatter.format(sum) + "Ft");
     }
 
     public void closeSheet() {
@@ -179,9 +207,9 @@ public class Sheet {
             startingQuantity.add(startingQuantityTmp);
             unit.add(unitTmp);
             fridge.add(Integer.parseInt(fridgeTmp));
-            if(Integer.parseInt(fridgeTmp) == 1) fridge1.add(name);
-            else if(Integer.parseInt(fridgeTmp) == 2) fridge2.add(name);
-            else if(Integer.parseInt(fridgeTmp) == 3) fridge3.add(name);
+            if (Integer.parseInt(fridgeTmp) == 1) fridge1.add(name);
+            else if (Integer.parseInt(fridgeTmp) == 2) fridge2.add(name);
+            else if (Integer.parseInt(fridgeTmp) == 3) fridge3.add(name);
             currentQuantity.add(0.0);
             System.out.println(name + " hozzáadva a listához!");
             toFile();
@@ -213,5 +241,16 @@ public class Sheet {
     public void setCurrentQuantity() {
         for (int i = 0; i < product.size(); i++)
             currentQuantity.add(0.0);
+    }
+
+    public void changeStartingQuantity() {
+        System.out.print("Biztosan szeretnéd, hogy új nyitókészlet legyen?[Igen] ");
+        if (scanner.nextLine().equals("Igen")) {
+            for (int i = 0; i < product.size(); i++)
+                startingQuantity.set(i, Double.toString(currentQuantity.get(i)));
+            toFile();
+            System.out.println("Új lett a nyitókészlet!");
+        } else
+            System.out.println("Nem lett importálva az új nyitókészlet!");
     }
 }

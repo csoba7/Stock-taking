@@ -43,6 +43,12 @@ public class Main {
         System.out.println();
     }
 
+    private static void newStartingQuantity(){
+        System.out.println();
+        sheet.changeStartingQuantity();
+        System.out.println();
+    }
+
     private static void exit() {
         sheet.closeSheet();
         run = false;
@@ -59,6 +65,7 @@ public class Main {
                     "4 - Termék hozzáadása\n" +
                     "5 - Termék törlése\n" +
                     "6 - Kiszámolás\n" +
+                    "7 - Új nyitókészlet\n" +
                     "Kilépés - Kilépés");
             System.out.print("Opció választása: ");
             switch (scanner.nextLine().toLowerCase()) {
@@ -79,6 +86,9 @@ public class Main {
                     break;
                 case "6":
                     count();
+                    break;
+                case "7":
+                    newStartingQuantity();
                     break;
                 case "kilépés":
                 case "kilepes":
