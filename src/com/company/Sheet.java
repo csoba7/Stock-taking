@@ -48,7 +48,7 @@ public class Sheet {
         }
     }
 
-    public void toFile() {
+    private void toFile() {
         FileWriter fw = null;
         try {
             fw = new FileWriter("Standlap.txt");
