@@ -70,31 +70,47 @@ public class Sheet {
         System.out.print("Melyik hűtő termékei legyen listázva? ");
         int fridgeTmp = scanner.nextInt();
         scanner.nextLine();
+        if (!fridge.contains(fridgeTmp) && fridgeTmp != 0) return -1;
         return fridgeTmp;
     }
 
     public void list() {
         int fridgeTmp = whichFridge();
-        System.out.println("Termék\t\t\t\t\tÁr\t\t\t\t\t\tnyitókészlet\t\t\t\t\tMaradvány");
-        System.out.println("-----------------------------------------------------------------------------------------");
-        for (int i = 0; i < product.size(); i++) {
-            if (fridgeTmp == fridge.get(i) || fridgeTmp == 0) {
-                if (product.get(i).length() < 4)
-                    System.out.print(product.get(i) + "\t\t\t\t\t\t");
-                else if (product.get(i).length() < 8)
-                    System.out.print(product.get(i) + "\t\t\t\t\t");
-                else if (product.get(i).length() < 12)
-                    System.out.print(product.get(i) + "\t\t\t\t");
-                else
-                    System.out.print(product.get(i) + "\t\t\t");
-                if (price.get(i).length() < 4)
-                    System.out.println(price.get(i) + "\t\t\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
-                else if (price.get(i).length() < 8)
-                    System.out.println(price.get(i) + "\t\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
-                else if (product.get(i).length() < 15)
-                    System.out.println(price.get(i) + "\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
+        if (fridgeTmp != -1) {
+            System.out.println("Termék\t\t\t\t\tÁr\t\t\t\t\t\tNyitókészlet\t\t\t\t\tMaradvány\t\t\t\t\t\tFogyás\t\t\t\t\t\t\tEladási érték");
+            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            for (int i = 0; i < product.size(); i++) {
+                if (fridgeTmp == fridge.get(i) || fridgeTmp == 0) {
+                    if (product.get(i).length() < 4)
+                        System.out.print(product.get(i) + "\t\t\t\t\t\t");
+                    else if (product.get(i).length() < 8)
+                        System.out.print(product.get(i) + "\t\t\t\t\t");
+                    else if (product.get(i).length() < 12)
+                        System.out.print(product.get(i) + "\t\t\t\t");
+                    else
+                        System.out.print(product.get(i) + "\t\t\t");
+                    if (price.get(i).length() < 4) {
+                        System.out.print(price.get(i) + "\t\t\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
+                    } else if (price.get(i).length() < 8) {
+                        System.out.print(price.get(i) + "\t\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
+                    } else if (product.get(i).length() < 15) {
+                        System.out.print(price.get(i) + "\t\t\t\t" + startingQuantity.get(i) + unit.get(i) + "\t\t\t\t\t\t\t" + currentQuantity.get(i) + unit.get(i));
+                    }
+                    if (getDifference(i) < 10) {
+                        System.out.println("\t\t\t\t\t\t\t" + getDifference(i) + "\t\t\t\t\t\t\t\t" + formatNumber(getDifference(i) * Double.parseDouble(price.get(i))) + "Ft");
+                    } else if (getDifference(i) < 100000) {
+                        System.out.println("\t\t\t\t\t\t\t" + getDifference(i) + "\t\t\t\t\t\t\t" + formatNumber(getDifference(i) * Double.parseDouble(price.get(i))) + "Ft");
+                    } else {
+                        System.out.println("\t\t\t\t\t\t\t" + getDifference(i) + "\t\t\t\t\t\t" + formatNumber(getDifference(i) * Double.parseDouble(price.get(i))) + "Ft");
+                    }
+                }
             }
-        }
+        } else
+            System.out.println("Nincs ilyen hűtő!");
+    }
+
+    private double getDifference(int i) {
+        return Double.parseDouble(startingQuantity.get(i)) - currentQuantity.get(i);
     }
 
     public void productToFridge() {
@@ -121,19 +137,32 @@ public class Sheet {
     }
 
     private int indexOfProductFromFridge(int fridge) {
+        int tmp;
         switch (fridge) {
             case 1:
                 for (int i = 0; i < fridge1.size(); i++)
                     System.out.println(i + 1 + " - " + fridge1.get(i));
-                return product.indexOf(fridge1.get(askWhichProduct()));
+                tmp = askWhichProduct();
+                if (tmp < 0 || tmp >= fridge1.size()) {
+                    return -1;
+                }
+                return product.indexOf(fridge1.get(tmp));
             case 2:
                 for (int i = 0; i < fridge2.size(); i++)
                     System.out.println(i + 1 + " - " + fridge2.get(i));
-                return product.indexOf(fridge2.get(askWhichProduct()));
+                tmp = askWhichProduct();
+                if (tmp < 0 || tmp >= fridge2.size()) {
+                    return -1;
+                }
+                return product.indexOf(fridge2.get(tmp));
             case 3:
                 for (int i = 0; i < fridge3.size(); i++)
                     System.out.println(i + 1 + " - " + fridge3.get(i));
-                return product.indexOf(fridge3.get(askWhichProduct()));
+                tmp = askWhichProduct();
+                if (tmp < 0 || tmp >= fridge3.size()) {
+                    return -1;
+                }
+                return product.indexOf(fridge3.get(tmp));
             default:
                 System.out.println("Nincs ilyen hűtő!");
                 return -1;
@@ -142,47 +171,58 @@ public class Sheet {
 
     public void addForStartingProduct() {
         int fridgeTmp = whichFridge();
-        int index = indexOfProductFromFridge(fridgeTmp);
-        if (index >= 0) {
-            System.out.println("A kiválasztott termék a(z) " + product.get(index) + " mennyisége: " + startingQuantity.get(index) + unit.get(index));
-            System.out.print("Mennyit szeretnél hozzáadni/elvenni? ");
-            double tmp = Double.parseDouble(scanner.nextLine());
-            tmp += Double.parseDouble(startingQuantity.get(index));
-            startingQuantity.set(index, Double.toString(tmp));
-            System.out.println("A(z) " + product.get(index) + " termék új mennyisége: " + startingQuantity.get(index) + unit.get(index));
-            toFile();
-        } else {
-            System.out.println("Nincs ilyen termék!");
-        }
+        if (fridgeTmp != -1 && fridgeTmp != 0) {
+            int index = indexOfProductFromFridge(fridgeTmp);
+            if (index >= 0) {
+                System.out.println("A kiválasztott termék a(z) " + product.get(index) + " mennyisége: " + startingQuantity.get(index) + unit.get(index));
+                System.out.print("Mennyit szeretnél hozzáadni/elvenni? ");
+                double tmp = Double.parseDouble(scanner.nextLine());
+                tmp += Double.parseDouble(startingQuantity.get(index));
+                startingQuantity.set(index, Double.toString(tmp));
+                System.out.println("A(z) " + product.get(index) + " termék új mennyisége: " + startingQuantity.get(index) + unit.get(index));
+                toFile();
+            } else {
+                System.out.println("Nincs ilyen termék!");
+            }
+        } else
+            System.out.println("Nincs ilyen hűtő!");
     }
 
     public void addForCurrentProduct() {
         int fridgeTmp = whichFridge();
-        int index = indexOfProductFromFridge(fridgeTmp);
-        if (index >= 0) {
-            System.out.println("A kiválasztott termék a(z) " + product.get(index) + " mennyisége: " + currentQuantity.get(index) + unit.get(index));
-            System.out.print("Mennyit szeretnél hozzáadni/elvenni? ");
-            double tmp = Double.parseDouble(scanner.nextLine());
-            tmp += currentQuantity.get(index);
-            currentQuantity.set(index, tmp);
-            System.out.println("A(z) " + product.get(index) + " termék új mennyisége: " + currentQuantity.get(index) + unit.get(index));
-            toFile();
+        if (fridgeTmp != -1 && fridgeTmp != 0) {
+            int index = indexOfProductFromFridge(fridgeTmp);
+            if (index >= 0) {
+                System.out.println("A kiválasztott termék a(z) " + product.get(index) + " mennyisége: " + currentQuantity.get(index) + unit.get(index));
+                System.out.print("Mennyit szeretnél hozzáadni/elvenni? ");
+                double tmp = Double.parseDouble(scanner.nextLine());
+                tmp += currentQuantity.get(index);
+                currentQuantity.set(index, tmp);
+                System.out.println("A(z) " + product.get(index) + " termék új mennyisége: " + currentQuantity.get(index) + unit.get(index));
+                toFile();
+            } else {
+                System.out.println("Nincs ilyen termék!");
+            }
         } else {
-            System.out.println("Nincs ilyen termék!");
+            System.out.println("Nincs ilyen hűtő!");
         }
     }
 
 
-    public void count() {
-        double sum = 0;
+    private String formatNumber(double number) {
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
         symbols.setGroupingSeparator(' ');
         formatter.setDecimalFormatSymbols(symbols);
+        return formatter.format(number);
+    }
+
+    public void count() {
+        double sum = 0;
         for (int i = 0; i < product.size(); i++) {
             sum += (Double.parseDouble(startingQuantity.get(i)) - currentQuantity.get(i)) * Double.parseDouble(price.get(i));
         }
-        System.out.println("A standolás végösszege: " + formatter.format(sum) + "Ft");
+        System.out.println("A standolás végösszege: " + formatNumber(sum) + "Ft");
     }
 
     public void closeSheet() {
@@ -246,8 +286,9 @@ public class Sheet {
     public void changeStartingQuantity() {
         System.out.print("Biztosan szeretnéd, hogy új nyitókészlet legyen?[Igen] ");
         if (scanner.nextLine().equals("Igen")) {
-            for (int i = 0; i < product.size(); i++)
+            for (int i = 0; i < product.size(); i++) {
                 startingQuantity.set(i, Double.toString(currentQuantity.get(i)));
+            }
             toFile();
             System.out.println("Új lett a nyitókészlet!");
         } else

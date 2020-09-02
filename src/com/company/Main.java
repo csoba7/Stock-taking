@@ -59,7 +59,8 @@ public class Main {
         sheet.setCurrentQuantity();
         sheet.productToFridge();
         while (run) {
-            System.out.println("1 - Listázás\n" +
+            System.out.println(
+                    "1 - Listázás\n" +
                     "2 - Maradványhoz adás/vétel\n" +
                     "3 - Nyitókészlethez adás/elvétel\n" +
                     "4 - Termék hozzáadása\n" +
